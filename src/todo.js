@@ -1,6 +1,4 @@
-import { format } from 'date-fns';
-
-class Todo {
+export class Todo {
     constructor(title, description, dueDate, priority, isComplete) {
         this.title = title;
         this.description = description;
@@ -50,13 +48,22 @@ class Todo {
     }
 }
 
-class Project {
-    constructor() {
+export class Project {
+    constructor(name) {
+        this.name = name;
         this.todoList = [];
+    }
+
+    get name() {
+        return this._name;
     }
 
     get todoList() {
         return this._todoList;
+    }
+
+    set name(newName) {
+        this._name = newName;
     }
 
     set todoList(list) {
@@ -79,4 +86,25 @@ class Project {
     }
 }
 
-export { Todo, Project };
+export class ProjectList {
+    constructor() {
+        this.projectList = [new Project('Default Project')];
+    }
+
+    get projectList() {
+        return this._projectList;
+    }
+
+    set projectList(list) {
+        this._projectList = list;
+    }
+
+    addProject(project) {
+        this.projectList.push(project);
+    }
+
+    removeProject(project) {
+        let index = this.projectList.findIndex(({ name }) => name === project.name);
+        this.projectList.splice(index, 1);
+    }
+}
