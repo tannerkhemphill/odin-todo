@@ -1,6 +1,6 @@
 import './style.css';
 import { Todo, Project, ProjectList } from './todo.js';
-import { generateHeader, generateBackground, generateTodoList, generateProjects } from './dom.js';
+import { generateHeader, generateBackground, generateTodoList, generateProjects, generateAddProjectForm } from './dom.js';
 
 let todo1 = new Todo('Dentist Appointment', 'Teeth cleaning', new Date(2021, 0, 14, 14), 'red', false);
 let todo2 = new Todo('Gym', 'Workout', new Date(2021, 0, 13, 18, 30), 'green', true);
@@ -33,9 +33,38 @@ menu.addEventListener('click', function() {
         background.removeChild(background.firstChild);
         let projects = generateProjects(projectList);
         background.appendChild(projects);
+        generateAddProjectButton();
         generateProjectButtons();
-    };
+    }
 })
+
+function generateAddProjectButton() {
+    let add = document.getElementById('add-project');
+    add.addEventListener('click', function() {
+        if (background.firstChild) {
+            background.removeChild(background.firstChild);
+            let form = generateAddProjectForm();
+            background.appendChild(form);
+            generateCreateProjectButton();
+        }
+    })
+}
+
+function generateCreateProjectButton() {
+    let form = document.getElementById('add-project-form');
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let name = form.elements['project'].value;
+        projectList.addProject(new Project(name));
+        if (background.firstChild) {
+            background.removeChild(background.firstChild);
+            let projects = generateProjects(projectList);
+            background.appendChild(projects);
+            generateAddProjectButton();
+            generateProjectButtons();
+        }
+    });
+}
 
 function generateProjectButtons() {
     let projects = document.getElementsByClassName('project-container');

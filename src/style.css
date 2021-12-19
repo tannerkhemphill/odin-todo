@@ -108,8 +108,20 @@ body, #background {
     align-items: center;
 }
 
+#add-project {
+    height: 100px;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid black;
+    border-radius: 50px;
+    margin: auto;
+    font-size: 40px;
+}
+
 .project-list {
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .project-container {
@@ -124,4 +136,40 @@ body, #background {
 
 .name-box {
     font-size: 40px;
+}
+
+#add-project-container {
+    width: 70vw;
+    height: 200px;
+    margin: 50px auto;
+    border: 3px solid black;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(23, 60, 92);
+}
+
+#add-project-form {
+    width: 50%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+#project-input {
+    flex: 1;
+    font-size: 30px;
+    margin-bottom: 10px;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: rgb(23, 60, 92);
+}
+
+#project-submit {
+    flex: 1;
+    font-size: 25px;
+    border: 3px solid black;
+    border-radius: 30px;
+    background-color: gray;
 }

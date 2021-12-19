@@ -77,6 +77,10 @@ export function generateProjects(projectList) {
     let list = projectList.projectList;
     let projects = document.createElement('div');
     projects.classList.add('project-list');
+    let addProject = document.createElement('div');
+    addProject.id = 'add-project';
+    addProject.textContent = 'Add Project';
+    projects.appendChild(addProject);
     for (let i = 0; i < list.length; i++) {
         let project = list[i];
         let projectContainer = document.createElement('div');
@@ -90,4 +94,32 @@ export function generateProjects(projectList) {
     }
 
     return projects;
+}
+
+export function generateAddProjectForm(){
+    let modal = document.createElement('div');
+    modal.id = 'add-project-container';
+
+    let form = document.createElement('form');
+    form.id = 'add-project-form';
+    
+    let input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'project';
+    input.id = 'project-input';
+    input.placeholder = 'Project Name';
+    input.maxLength = 20;
+    input.required = true;
+
+    let submit = document.createElement('input');
+    submit.type = 'submit';
+    submit.value = 'CREATE';
+    submit.id = 'project-submit';
+
+    form.appendChild(input);
+    form.appendChild(submit);
+
+    modal.appendChild(form);
+
+    return modal;
 }
