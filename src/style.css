@@ -23,7 +23,7 @@ body {
     font-weight: 700;
 }
 
-#add {
+#plus {
     flex: 1 1 auto;
     padding: 1rem;
 }
@@ -169,6 +169,71 @@ body, #background {
 #project-submit {
     flex: 1;
     font-size: 25px;
+    border: 3px solid black;
+    border-radius: 30px;
+    background-color: gray;
+}
+
+#add-todo-container {
+    width: 70vw;
+    height: 500px;
+    margin: 50px auto;
+    border: 3px solid black;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(23, 60, 92);
+}
+
+#add-todo-form {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#title-input {
+    flex: 1;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 30px;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: rgb(23, 60, 92);
+}
+
+#description-input {
+    flex: 2;
+    margin-bottom: 10px;
+    font-size: 30px;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: rgb(23, 60, 92);
+}
+
+#date-input {
+    flex: 1;
+    margin-bottom: 10px;
+    font-size: 30px;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: rgb(23, 60, 92);
+}
+
+#priority-input {
+    flex: 1;
+    margin-bottom: 10px;
+    font-size: 30px;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: rgb(23, 60, 92);
+}
+
+#todo-submit {
+    flex: 1;
+    margin-bottom: 10px;
+    font-size: 30px;
     border: 3px solid black;
     border-radius: 30px;
     background-color: gray;

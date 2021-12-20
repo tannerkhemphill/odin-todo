@@ -14,14 +14,14 @@ export function generateHeader() {
     menu.appendChild(icon1);
     const title = document.createElement('div');
     title.id = 'title';
-    const add = document.createElement('div');
-    add.id = 'add';
+    const plus = document.createElement('div');
+    plus.id = 'plus';
     let icon2 = new Image();
     icon2.src = AddIcon;
-    add.appendChild(icon2);
+    plus.appendChild(icon2);
     header.appendChild(menu);
     header.appendChild(title);
-    header.appendChild(add);
+    header.appendChild(plus);
 
     return header;
 }
@@ -97,8 +97,8 @@ export function generateProjects(projectList) {
 }
 
 export function generateAddProjectForm(){
-    let modal = document.createElement('div');
-    modal.id = 'add-project-container';
+    let container = document.createElement('div');
+    container.id = 'add-project-container';
 
     let form = document.createElement('form');
     form.id = 'add-project-form';
@@ -119,7 +119,73 @@ export function generateAddProjectForm(){
     form.appendChild(input);
     form.appendChild(submit);
 
-    modal.appendChild(form);
+    container.appendChild(form);
 
-    return modal;
+    return container;
+}
+
+export function generateAddTodoForm() {
+    let container = document.createElement('div');
+    container.id = 'add-todo-container';
+
+    let form = document.createElement('form');
+    form.id = 'add-todo-form';
+
+    let titleInput = document.createElement('input');
+    titleInput.id = 'title-input';
+    titleInput.type = 'text';
+    titleInput.name = 'title';
+    titleInput.placeholder = 'Title';
+    titleInput.maxLength = 20;
+    titleInput.required = true;
+
+    let descInput = document.createElement('textarea');
+    descInput.id = 'description-input';
+    descInput.name = 'description';
+    descInput.placeholder = 'Description';
+    descInput.maxLength = 100;
+    descInput.required = true;
+
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+    let hours = today.getHours();
+    let minutes = today.getMinutes();
+
+    month.toString().length == 1 ? month = `0${month}` : month = month;
+    day.toString().length == 1 ? day = `0${day}` : day = day;
+    hours.toString().length == 1 ? hours = `0${hours}` : hours = hours;
+    minutes.toString().length == 1 ? minutes = `0${minutes}` : minutes = minutes;
+
+    let dateInput = document.createElement('input');
+    dateInput.id = 'date-input';
+    dateInput.type = 'text';
+    dateInput.name = 'date';
+    dateInput.defaultValue = `${month}/${day}/${year} ${hours}:${minutes}`;
+    dateInput.maxLength = 16;
+    dateInput.required = true;
+
+    let priorityInput = document.createElement('input');
+    priorityInput.id = 'priority-input';
+    priorityInput.type = 'text';
+    priorityInput.name = 'priority';
+    priorityInput.placeholder = '1-3 (Highest-Lowest)';
+    priorityInput.maxLength = 1;
+    priorityInput.required = true;
+
+    let submit = document.createElement('input');
+    submit.type = 'submit';
+    submit.value = 'CREATE';
+    submit.id = 'todo-submit';
+
+    form.appendChild(titleInput);
+    form.appendChild(descInput);
+    form.appendChild(dateInput);
+    form.appendChild(priorityInput);
+    form.appendChild(submit);
+
+    container.appendChild(form);
+
+    return container;
 }
