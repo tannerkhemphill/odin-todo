@@ -1,7 +1,6 @@
 import MenuIcon from './assets/bars-solid.svg';
 import AddIcon from './assets/plus-solid.svg';
 import { format } from 'date-fns';
-import {Todo, Project} from './todo.js';
 
 export function generateHeader() {
     const header = document.createElement('div');
@@ -42,6 +41,7 @@ export function generateTodoList(project) {
         let collapsibleContainer = document.createElement('div');
         collapsibleContainer.classList.add('collapsible-container');
         let todoContainer = document.createElement('div');
+        todoContainer.dataset.index = i;
         todoContainer.classList.add('todo-container');
         let priorityBox = document.createElement('div');
         priorityBox.classList.add('priority-box');
@@ -51,7 +51,10 @@ export function generateTodoList(project) {
         titleBox.textContent = todoItem.title;
         let dateBox = document.createElement('div');
         dateBox.classList.add('date-box');
-        dateBox.textContent = format(todoItem.dueDate, 'MM/dd/yyyy hh:mm aa');
+        dateBox.textContent = todoItem.dueDate;
+        let delButton = document.createElement('button');
+        delButton.classList.add('delete-todo-button');
+        delButton.innerHTML = 'X';
         let expand = document.createElement('div');
         expand.classList.add('expand');
         let title = document.createElement('p');
@@ -65,6 +68,7 @@ export function generateTodoList(project) {
         todoContainer.appendChild(priorityBox);
         todoContainer.appendChild(titleBox);
         todoContainer.appendChild(dateBox);
+        todoContainer.appendChild(delButton);
         collapsibleContainer.appendChild(todoContainer);
         collapsibleContainer.appendChild(expand);
         todoList.appendChild(collapsibleContainer);
@@ -89,6 +93,10 @@ export function generateProjects(projectList) {
         let nameBox = document.createElement('div');
         nameBox.classList.add('name-box');
         nameBox.textContent = project.name;
+        let delButton = document.createElement('button');
+        delButton.classList.add('delete-project-button');
+        delButton.innerHTML = 'X';
+        projectContainer.appendChild(delButton);
         projectContainer.appendChild(nameBox);
         projects.appendChild(projectContainer);
     }
@@ -148,22 +156,17 @@ export function generateAddTodoForm() {
 
     let today = new Date();
     let year = today.getFullYear();
-    let month = today.getMonth() + 1;
+    let month = today.getMonth();
     let day = today.getDate();
     let hours = today.getHours();
     let minutes = today.getMinutes();
-
-    month.toString().length == 1 ? month = `0${month}` : month = month;
-    day.toString().length == 1 ? day = `0${day}` : day = day;
-    hours.toString().length == 1 ? hours = `0${hours}` : hours = hours;
-    minutes.toString().length == 1 ? minutes = `0${minutes}` : minutes = minutes;
 
     let dateInput = document.createElement('input');
     dateInput.id = 'date-input';
     dateInput.type = 'text';
     dateInput.name = 'date';
-    dateInput.defaultValue = `${month}/${day}/${year} ${hours}:${minutes}`;
-    dateInput.maxLength = 16;
+    dateInput.defaultValue = format(new Date(year, month, day, hours, minutes), 'MM/dd/yyyy hh:mm aa');
+    dateInput.maxLength = 20;
     dateInput.required = true;
 
     let priorityInput = document.createElement('input');

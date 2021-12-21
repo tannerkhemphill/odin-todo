@@ -108,6 +108,14 @@ body, #background {
     align-items: center;
 }
 
+.delete-todo-button {
+    align-self: flex-start;
+    background-color: #555;
+    font-size: 30px;
+    border: 3px solid black;
+    border-radius: 50px;
+}
+
 #add-project {
     height: 100px;
     width: 50%;
@@ -127,7 +135,7 @@ body, #background {
 .project-container {
     height: 125px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     border: 3px solid black;
     border-radius: 10px;
@@ -136,6 +144,14 @@ body, #background {
 
 .name-box {
     font-size: 40px;
+}
+
+.delete-project-button {
+    align-self: flex-end;
+    background-color: #555;
+    font-size: 30px;
+    border: 3px solid black;
+    border-radius: 50px;
 }
 
 #add-project-container {

@@ -2,32 +2,71 @@ import './style.css';
 import { Todo, Project, ProjectList } from './todo.js';
 import { generateHeader, generateBackground, generateTodoList, generateProjects, generateAddProjectForm, generateAddTodoForm } from './dom.js';
 
-let todo1 = new Todo('Dentist Appointment', 'Teeth cleaning', new Date(2021, 0, 14, 14), 'red', false);
-let todo2 = new Todo('Gym', 'Workout', new Date(2021, 0, 13, 18, 30), 'green', true);
-let todo3 = new Todo('Cook Dinner', 'Cook dinner after work', new Date(2021, 0, 13, 17, 30), 'yellow', false);
+/*let projectList = new ProjectList();
+let project0 = new Project('Default Project');
+projectList.addProject(project0);
+
+let selectedProject = projectList.projectList[0];
+
+let todo1 = new Todo('Dentist Appointment', 'Teeth cleaning', '01/14/2022 02:00 PM', 'red', false);
+let todo2 = new Todo('Gym', 'Workout', '01/13/2022 06:30 PM', 'green', true);
+let todo3 = new Todo('Cook Dinner', 'Cook dinner after work', '01/14/2022 05:30 PM', 'yellow', false);
 
 let project1 = new Project('My Project');
 project1.addTodo(todo1);
 project1.addTodo(todo2);
 project1.addTodo(todo3);
 
-let projectList = new ProjectList();
 projectList.addProject(project1);
+
+localStorage.clear();
+localStorage.setItem(project1.name, JSON.stringify(project1.todoList));
+
+let project = JSON.parse(localStorage.getItem(project1.name) || '[]');
+let todo = project[0];
+console.log(todo._title); */
+
+// localStorage.clear();
+
+let projectList = new ProjectList();
+
+if (localStorage.length > 0) {
+    for (let i = 0; i < localStorage.length; i++) {
+        let name = localStorage.key(i);
+        let project = new Project(name);
+        let todos = JSON.parse(localStorage.getItem(name));
+        for (let j = 0; j < todos.length; j++) {
+            let title = todos[j]._title;
+            let desc = todos[j]._description;
+            let date = todos[j]._dueDate;
+            let prio = todos[j]._priority;
+            let complete = todos[j]._isComplete;
+            project.addTodo(new Todo(title, desc, date, prio, complete));
+        }
+        projectList.addProject(project);
+    }
+}
+else {
+    projectList.addProject(new Project('Default Project'));
+}
+
+let selectedProject = projectList.projectList[0];
+
 
 const content = document.getElementById('content');
 
 const header = generateHeader();
 const title = header.childNodes[1];
-title.textContent = projectList.projectList[0].name;
+title.textContent = selectedProject.name;
 content.appendChild(header);
 
 const background = generateBackground();
 content.appendChild(background);
 
-let selectedProject = projectList.projectList[0];
-
 let todoList = generateTodoList(selectedProject);
 background.appendChild(todoList);
+generateTodoButtons();
+generateDeleteTodoButtons();
 
 let menu = document.getElementById('menu');
 menu.addEventListener('click', function() {
@@ -38,6 +77,7 @@ menu.addEventListener('click', function() {
         background.appendChild(projects);
         generateAddProjectButton();
         generateProjectButtons();
+        generateDeleteProjectButtons()
     }
 })
 
@@ -71,15 +111,18 @@ function generateCreateProjectButton() {
         event.preventDefault();
         title.textContent = 'Project List';
         let name = form.elements['project'].value;
-        projectList.addProject(new Project(name));
+        let newProject = new Project(name);
+        projectList.addProject(newProject);
+        localStorage.setItem(newProject.name, JSON.stringify(newProject.todoList));
         if (background.firstChild) {
             background.removeChild(background.firstChild);
             let projects = generateProjects(projectList);
             background.appendChild(projects);
             generateAddProjectButton();
             generateProjectButtons();
+            generateDeleteProjectButtons();
         }
-    });
+    })
 }
 
 function generateCreateTodoButton() {
@@ -88,8 +131,7 @@ function generateCreateTodoButton() {
         event.preventDefault();
         let name = form.elements['title'].value;
         let desc = form.elements['description'].value;
-        let dateTime = form.elements['date'].value;
-        let date = parseDate(dateTime);
+        let date = form.elements['date'].value;
         let priority = form.elements['priority'].value;
         if (priority === '1') {
             priority = 'red';
@@ -101,11 +143,13 @@ function generateCreateTodoButton() {
             priority = 'green';
         }
         selectedProject.addTodo(new Todo(name, desc, date, priority, false));
+        localStorage.setItem(selectedProject.name, JSON.stringify(selectedProject.todoList));
         if (background.firstChild) {
             background.removeChild(background.firstChild);
             let todo = generateTodoList(selectedProject);
             background.appendChild(todo);
             generateTodoButtons();
+            generateDeleteTodoButtons();
             title.textContent = selectedProject.name;
         }
     })
@@ -117,11 +161,34 @@ function generateProjectButtons() {
         projects[i].addEventListener("click", function() {
         if (background.firstChild) {
             background.removeChild(background.firstChild);
-            selectedProject = projectList.projectList[parseInt(this.dataset.index)]
+            selectedProject = projectList.projectList[parseInt(this.dataset.index)];
             let todo = generateTodoList(selectedProject);
             background.appendChild(todo);
             generateTodoButtons();
+            generateDeleteTodoButtons();
             title.textContent = selectedProject.name;
+            }
+        })
+    }
+}
+
+function generateDeleteProjectButtons() {
+    let buttons = document.getElementsByClassName('delete-project-button');
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", function(event) {
+            event.stopPropagation();
+            let projectElement = event.target.parentElement;
+            selectedProject = projectList.projectList[parseInt(projectElement.dataset.index)];
+            if (selectedProject.name !== 'Default Project') {
+                projectList.removeProject(selectedProject);
+                localStorage.removeItem(selectedProject.name);
+            }
+            if (background.firstChild) {
+                background.removeChild(background.firstChild);
+                let projects = generateProjects(projectList);
+                background.appendChild(projects);
+                generateAddProjectButton();
+                generateProjectButtons();
             }
         })
     }
@@ -144,21 +211,22 @@ function generateTodoButtons() {
     }
 }
 
-function parseDate(dateString) {
-    let string = dateString;
-    let month = string.substring(0, 2);
-    let day = string.substring(3, 5);
-    let year = string.substring(6, 10);
-    let hours = string.substring(11, 13);
-    let minutes = string.substring(14, 16);
-
-    month.length == 2 && month[0] === '0' ? month = parseInt(month[1]) - 1 : month = parseInt(month) - 1;
-    day.length == 2 && day[0] === '0' ? day = parseInt(day[1]) : day = parseInt(day);
-    year = parseInt(year);
-    hours.length == 2 && hours[0] === '0' ? hours = parseInt(hours[1]) : hours = parseInt(hours);
-    minutes.length == 2 && minutes[0] === '0' ? minutes = parseInt(minutes[1]) : minutes = parseInt(minutes);
-
-    let date = new Date(year, month, day, hours, minutes);
-
-    return date;
+function generateDeleteTodoButtons() {
+    let buttons = document.getElementsByClassName('delete-todo-button');
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function(event) {
+            event.stopPropagation();
+            let todoElement = event.target.parentElement;
+            let selectedTodo = selectedProject.todoList[parseInt(todoElement.dataset.index)];
+            selectedProject.removeTodo(selectedTodo);
+            localStorage.setItem(selectedProject.name, JSON.stringify(selectedProject.todoList));
+            if (background.firstChild) {
+                background.removeChild(background.firstChild);
+                let todo = generateTodoList(selectedProject);
+                background.appendChild(todo);
+                generateTodoButtons();
+                generateDeleteTodoButtons();
+            }
+        })
+    }
 }

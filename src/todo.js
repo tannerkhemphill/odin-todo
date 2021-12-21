@@ -72,6 +72,7 @@ export class Project {
 
     addTodo(todo) {
         this.todoList.push(todo);
+        this.getSortedTodoList();
     }
 
     removeTodo(todo) {
@@ -81,14 +82,14 @@ export class Project {
 
     getSortedTodoList() {
         return this.todoList.sort(function(a, b) {
-            return a.dueDate - b.dueDate;
+            return parseDate(a.dueDate) - parseDate(b.dueDate);
         });
     }
 }
 
 export class ProjectList {
     constructor() {
-        this.projectList = [new Project('Default Project')];
+        this.projectList = [];
     }
 
     get projectList() {
@@ -107,4 +108,28 @@ export class ProjectList {
         let index = this.projectList.findIndex(({ name }) => name === project.name);
         this.projectList.splice(index, 1);
     }
+}
+
+export function parseDate(dateString) {
+    let string = dateString;
+    let month = string.substring(0, 2);
+    let day = string.substring(3, 5);
+    let year = string.substring(6, 10);
+    let hours = string.substring(11, 13);
+    let minutes = string.substring(14, 16);
+    let ampm = string.substring(17, 19);
+
+    month.length == 2 && month[0] === '0' ? month = parseInt(month[1]) - 1 : month = parseInt(month) - 1;
+    day.length == 2 && day[0] === '0' ? day = parseInt(day[1]) : day = parseInt(day);
+    year = parseInt(year);
+    hours.length == 2 && hours[0] === '0' ? hours = parseInt(hours[1]) : hours = parseInt(hours);
+    minutes.length == 2 && minutes[0] === '0' ? minutes = parseInt(minutes[1]) : minutes = parseInt(minutes);
+
+    if (ampm === 'PM' && hours !== '12') {
+        hours += 12;
+    }
+
+    let date = new Date(year, month, day, hours, minutes);
+
+    return date;
 }
