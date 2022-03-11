@@ -1,3 +1,5 @@
+// This file contains the combined functionality of the DOM and Todo files
+
 import './style.css';
 import { Todo, Project, ProjectList } from './todo.js';
 import { generateHeader, generateBackground, generateTodoList, generateProjects, generateAddProjectForm, generateAddTodoForm } from './dom.js';
@@ -28,8 +30,11 @@ console.log(todo._title); */
 
 // localStorage.clear();
 
+// Create a projectlist object to hold all of a user's projects
 let projectList = new ProjectList();
 
+// Check to see if the user already has projects saved in local storage
+// and if so display them, otherwise create a default project
 if (localStorage.length > 0) {
     for (let i = 0; i < localStorage.length; i++) {
         let name = localStorage.key(i);
@@ -50,9 +55,10 @@ else {
     projectList.addProject(new Project('Default Project'));
 }
 
+// Create a variable to hold the currently displayed project
 let selectedProject = projectList.projectList[0];
 
-
+// Display the header and todo list of the selected project
 const content = document.getElementById('content');
 
 const header = generateHeader();
@@ -68,6 +74,7 @@ background.appendChild(todoList);
 generateTodoButtons();
 generateDeleteTodoButtons();
 
+// Add event listener to menu button that displays user's project list
 let menu = document.getElementById('menu');
 menu.addEventListener('click', function() {
     if (background.firstChild) {
@@ -81,6 +88,7 @@ menu.addEventListener('click', function() {
     }
 })
 
+// Add event listener to plus button that displays add todo item form
 let plus = document.getElementById('plus');
 plus.addEventListener('click', function() {
     if (background.firstChild) {
@@ -92,6 +100,8 @@ plus.addEventListener('click', function() {
     }
 })
 
+// Function to add event listener to add project button each time it is
+// shown that allows it to display create project form
 function generateAddProjectButton() {
     let add = document.getElementById('add-project');
     add.addEventListener('click', function() {
@@ -105,6 +115,9 @@ function generateAddProjectButton() {
     })
 }
 
+// Function to add event listener to submit button on add project form
+// that takes the name provided by the user and creates a new project,
+// adds it to the project list, and saves it to localstorage
 function generateCreateProjectButton() {
     let form = document.getElementById('add-project-form');
     form.addEventListener('submit', (event) => {
@@ -125,6 +138,9 @@ function generateCreateProjectButton() {
     })
 }
 
+// Function to add event listener to submit button on add todo form that
+// takes the information provided by the user and creates a new todo item,
+// adds it to the project, and saves it to local storage
 function generateCreateTodoButton() {
     let form = document.getElementById('add-todo-form');
     form.addEventListener('submit', (event) => {
@@ -155,6 +171,8 @@ function generateCreateTodoButton() {
     })
 }
 
+// Function to add event listeners to each project container that when 
+// selected the the user displays the todo list of the project
 function generateProjectButtons() {
     let projects = document.getElementsByClassName('project-container');
     for (let i = 0; i < projects.length; i++) {
@@ -172,6 +190,9 @@ function generateProjectButtons() {
     }
 }
 
+// Function to add event listeners to the delete project buttons attached
+// to each project container that when clicked delete the chosen project
+// from the project list as well as from localstorage
 function generateDeleteProjectButtons() {
     let buttons = document.getElementsByClassName('delete-project-button');
     for (let i = 0; i < buttons.length; i++) {
@@ -194,6 +215,8 @@ function generateDeleteProjectButtons() {
     }
 }
 
+// Function to add event listeners to each todo item container that when
+// clicked by the user opens a dropdown of additional todo information
 function generateTodoButtons() {
     let collapsibles = document.getElementsByClassName('todo-container');
     for (let i = 0; i < collapsibles.length; i++) {
@@ -211,6 +234,9 @@ function generateTodoButtons() {
     }
 }
 
+// Function to add event listeners to the delete todo buttons attached to
+// each project container that when clicked delete the chosen todo item
+// from the project as well as from localstorage
 function generateDeleteTodoButtons() {
     let buttons = document.getElementsByClassName('delete-todo-button');
     for (let i = 0; i < buttons.length; i++) {

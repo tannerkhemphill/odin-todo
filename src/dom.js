@@ -1,7 +1,11 @@
+// This file controls the DOM manipulation actions of the page
+
 import MenuIcon from './assets/bars-solid.svg';
 import AddIcon from './assets/plus-solid.svg';
 import { format } from 'date-fns';
 
+// This function creates the header section of the page that displays a
+// menu button, an add todo button, and the current project title
 export function generateHeader() {
     const header = document.createElement('div');
     header.id = 'header';
@@ -25,6 +29,7 @@ export function generateHeader() {
     return header;
 }
 
+// This function creates the background container to hold the page content
 export function generateBackground() {
     const background = document.createElement('div');
     background.id = 'background';
@@ -32,6 +37,7 @@ export function generateBackground() {
     return background;
 }
 
+// This function generates the todo list of a given project and returns it
 export function generateTodoList(project) {
     let list = project.getSortedTodoList();
     let todoList = document.createElement('div');
@@ -77,6 +83,7 @@ export function generateTodoList(project) {
     return todoList;
 }
 
+// This function generates the project list of the user and returns it
 export function generateProjects(projectList) {
     let list = projectList.projectList;
     let projects = document.createElement('div');
@@ -104,6 +111,7 @@ export function generateProjects(projectList) {
     return projects;
 }
 
+// This function generates a form for the user to create a new project and returns it
 export function generateAddProjectForm(){
     let container = document.createElement('div');
     container.id = 'add-project-container';
@@ -132,6 +140,7 @@ export function generateAddProjectForm(){
     return container;
 }
 
+// This function generates a form for the user to create a new todo item and returns it
 export function generateAddTodoForm() {
     let container = document.createElement('div');
     container.id = 'add-todo-container';
